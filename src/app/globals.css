@@ -5,6 +5,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary: #877eff;
+  --secondary: #ffb620;
+  --dark-1: #000000;
+  --dark-2: #09090a;
+  --dark-3: #101012;
+  --dark-4: #1f1f22;
+  --light-1: #ffffff;
+  --light-2: #efefef;
+  --light-3: #7878a3;
+  --light-4: #5c5c7b;
+  --gradient: linear-gradient(180deg, #877eff 0%, #685dff 46.15%, #3121ff 100%);
 }
 
 @media (prefers-color-scheme: dark) {
