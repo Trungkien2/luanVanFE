@@ -5,16 +5,68 @@ import React from "react";
 import Link from "next/link";
 import { FieldError, useForm } from "react-hook-form";
 import { ROUTER_WEB } from "@/util/route";
+import { Bounce, toast } from "react-toastify";
+import authApi from "@/api/auth/auth.api";
+import { useRouter } from "next/navigation";
+
+interface LoginFormData {
+  name: string;
+  email: string;
+  password: string;
+}
+
 const LoginFrom: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<LoginFormData>();
+  const router = useRouter();
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const res: any = await authApi.login(data);
+      if (res) {
+        await fetch("/api/auth", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: res?.access_token }),
+        });
+      }
 
-  const onSubmit = (data: unknown) => {
-    console.log(data);
-    // Handle login logic here
+      toast.success(`${res?.message?.en}`, {
+        position: "top-right",
+        autoClose: 500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+        transition: Bounce,
+      });
+      router.push(ROUTER_WEB.HOME_PAGE);
+    } catch (error: any) {
+      toast.error(
+        `${
+          error.response.data.message.message.en || "An unknown error occurred"
+        }`,
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "light",
+          transition: Bounce,
+        }
+      );
+    }
+  };
+
+  const handleLoginGoogle = () => {
+    window.location.href = "http://localhost:5000/api/v1/auth/google";
   };
   return (
     <div className="mt-[32px]">
@@ -72,7 +124,10 @@ const LoginFrom: React.FC = () => {
         </form>
 
         {/* Google Sign In Button */}
-        <button className="w-full mt-4 py-2 bg-white text-black rounded-lg flex items-center justify-center gap-2 border border-gray-300 hover:bg-gray-100 transition-colors">
+        <button
+          className="w-full mt-4 py-2 bg-white text-black rounded-lg flex items-center justify-center gap-2 border border-gray-300 hover:bg-gray-100 transition-colors"
+          onClick={handleLoginGoogle}
+        >
           <Image src={GoogleIcon} alt="Google icon" className="h-5 w-5" />
           Sign in with Google
         </button>
