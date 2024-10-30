@@ -27,6 +27,18 @@
 
 body {
   color: var(--light-1);
-  background: var(--dark-2);
+  background: var(--dark-1);
   font-family: Arial, Helvetica, sans-serif;
+}
+.explore-search {
+  @apply h-12 bg-dark_4 border-none placeholder:text-light_4 focus-visible:ring-0 focus-visible:ring-offset-0 ring-offset-0 !important;
+}
+.title {
+  @apply text-[24px] font-bold  !important;
+}
+
+.icon-add-post {
+  position: fixed;
+  bottom: 5%;
+  right: 30%;
 }

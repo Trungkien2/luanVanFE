@@ -39,15 +39,15 @@ export default function Home({ searchParams }: { searchParams: SearchParams }) {
     const saved = use(saveToken(accessToken as string));
     if (saved) {
       // Xóa query params bằng cách redirect về chính trang mà không có params
-      redirect('/');
+      redirect("/");
     }
   }
 
   return (
-  <div className="flex justify-between">
-    <Sidebar/>
-    <HomePage/>
-    <Topcreator/>
-  </div>
+    <div className="flex justify-between h-screen">
+      <Sidebar />
+      <HomePage />
+      <Topcreator />
+    </div>
   );
 }
