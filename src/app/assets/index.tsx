@@ -4,4 +4,13 @@ import GoogleIcon from "./google_icon.svg";
 import LogoMain from "./Logo_main.svg";
 import MainPost from "./image.png";
 import AddPosticon from "./icons/add-post.svg";
-export { Logo, Image1, GoogleIcon, LogoMain, MainPost, AddPosticon };
+import ExploreCardPost from "./page/explore/explore_card_post.png";
+export {
+  Logo,
+  Image1,
+  GoogleIcon,
+  LogoMain,
+  MainPost,
+  AddPosticon,
+  ExploreCardPost,
+};
