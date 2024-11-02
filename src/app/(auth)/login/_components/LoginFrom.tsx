@@ -8,6 +8,7 @@ import { ROUTER_WEB } from "@/util/route";
 import { Bounce, toast } from "react-toastify";
 import authApi from "@/api/auth/auth.api";
 import { useRouter } from "next/navigation";
+import ToastProvider from "@/provider/ToastProvider";
 
 interface LoginFormData {
   name: string;
@@ -47,9 +48,10 @@ const LoginFrom: React.FC = () => {
       });
       router.push(ROUTER_WEB.HOME_PAGE);
     } catch (error: any) {
+      console.log("🚀 ~ file: LoginFrom.tsx ~ line 51 ~ onSubmit ~ error", error.response)
       toast.error(
         `${
-          error.response.data.message.message.en || "An unknown error occurred"
+          error.response.data?.message?.en || "An unknown error occurred"
         }`,
         {
           position: "top-right",
@@ -143,6 +145,7 @@ const LoginFrom: React.FC = () => {
           </Link>
         </p>
       </div>
+      <ToastProvider /> 
     </div>
   );
 };

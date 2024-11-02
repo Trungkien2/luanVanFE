@@ -1,6 +1,7 @@
 import { AddPosticon } from "@/app/assets";
 import Image from "next/image";
 import FormCreate from "./_components/FormCreate";
+import TopPost from "./_components/TopPost";
 const page = () => {
   return (
     <div>
@@ -8,7 +9,11 @@ const page = () => {
         <Image src={AddPosticon} alt="add post" />
         Create a Post
       </h1>
-      <FormCreate />
+      <div className="flex h-dvh">
+        
+        <FormCreate />
+        <TopPost />
+      </div>
     </div>
   );
 };

@@ -18,7 +18,7 @@ const CardPost = ({ post }: any) => {
         alt="Post image"
         width={600}
         height={300}
-        className="rounded-lg mb-4"
+        className="rounded-lg mb-4 w-full"
       />
       <div className="flex items-center justify-between text-gray-500 mb-2">
         <span className="flex items-center space-x-2">

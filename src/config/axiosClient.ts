@@ -47,4 +47,14 @@ axiosClient.interceptors.request.use((config) => {
 
   return config;
 });
+
+// Add a response interceptor
+axiosClient.interceptors.response.use(
+  function (response: any) {
+    return response.data;
+  },
+  async function (error: any) {
+    return Promise.reject(error);
+  },
+);
 export default axiosClient;

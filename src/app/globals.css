@@ -36,6 +36,13 @@ body {
 .title {
   @apply text-[24px] font-bold  !important;
 }
+.custom-button{
+  @apply bg-dark_2 py-[12px] px-[50px];
+  
+}
+.custom-button:hover {
+  opacity: .8;
+}
 
 .icon-add-post {
   position: fixed;

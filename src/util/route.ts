@@ -8,6 +8,7 @@ export const ROUTER_WEB = {
   CHATS: "/chats",
   SETTINGS: "/settings",
   CREATE_POST: "/create-post",
+  REELS : '/reels'
 };
 
 export const ROUTER_API = {
