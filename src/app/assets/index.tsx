@@ -8,6 +8,7 @@ import ExploreCardPost from "./page/explore/explore_card_post.png";
 import ImageDemoCreatePost from './page/create-post/image_1.png'
 import ImageDemo2CreatePost from './page/create-post/image_2.png'
 import galleryAddIcon from './icons/gallery-add.svg'
+import PeopleIcon from './icons/people.svg';
 export {
   Logo,
   Image1,
@@ -18,5 +19,6 @@ export {
   ExploreCardPost,
   ImageDemoCreatePost,
   ImageDemo2CreatePost,
-  galleryAddIcon
+  galleryAddIcon,
+  PeopleIcon
 };
