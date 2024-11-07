@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { galleryAddIcon, LogoMain } from "@/app/assets";
 import {
@@ -17,6 +17,7 @@ import Image from "next/image";
 import { ROUTER_WEB } from "@/util/route";
 
 export default function Sidebar() {
+  const router = useRouter()
   const pathname = usePathname(); // Lấy pathname từ usePathname
   const handleLogout = async () => {
     await fetch("/api/logout", {
@@ -51,7 +52,7 @@ export default function Sidebar() {
       <div className="mb-8">
         <Image src={LogoMain} alt="logo" />
       </div>
-      <div className="my-11 flex gap-3">
+      <div className="my-11 flex gap-3 cursor-pointer" onClick={()=> router.push(ROUTER_WEB.USER_PROFILE)}>
         <Avatar>H</Avatar>
         <div>
           <p className="text-[18px] font-bold">Lewis Hamilton</p>
