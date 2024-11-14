@@ -10,6 +10,7 @@ import ImageDemo2CreatePost from './page/create-post/image_2.png'
 import galleryAddIcon from './icons/gallery-add.svg'
 import PeopleIcon from './icons/people.svg';
 import EditIcon from './icons/edit.svg';
+import StoryImage from './storyImage.png'
 export {
   Logo,
   Image1,
@@ -22,5 +23,6 @@ export {
   ImageDemo2CreatePost,
   galleryAddIcon,
   PeopleIcon,
-  EditIcon
+  EditIcon,
+  StoryImage
 };

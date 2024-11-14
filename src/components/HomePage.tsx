@@ -4,6 +4,7 @@ import CardPost from "./CardPost/CardPost";
 import { MainPost } from "@/app/assets";
 import { useRouter } from "next/navigation";
 
+
 const HomePage = () => {
   const router = useRouter();
   const fakePost = {
@@ -18,6 +19,7 @@ const HomePage = () => {
   };
   return (
     <div className="pt-[48px] flex-1 px-[52px] overflow-y-auto scrollbar-none">
+     
       <h1 className="text-[24px] font-bold">Home Feed</h1>
       <div className="mt-[40px]">
         <CardPost post={fakePost} />
