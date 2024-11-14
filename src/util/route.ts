@@ -9,7 +9,8 @@ export const ROUTER_WEB = {
   SETTINGS: "/settings",
   CREATE_POST: "/create-post",
   REELS : '/reels',
-  USER_PROFILE : '/user-profile'
+  USER_PROFILE : '/user-profile',
+  EDIT_PROFILE : '/edit-profile'
 };
 
 export const ROUTER_API = {

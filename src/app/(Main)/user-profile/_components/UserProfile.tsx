@@ -6,11 +6,14 @@ import Image from "next/image";
 import React from "react";
 import ButtonGroupCustom from "./ButtonGroup";
 import CardPost from "../../explore/_components/CardPost";
+import { useRouter } from "next/navigation";
+import { ROUTER_WEB } from "@/util/route";
 interface IProps {
   isOtherProfile?: boolean;
 }
 
 const UserProfile: React.FC<IProps> = ({ isOtherProfile }) => {
+  const router = useRouter();
   return (
     <div className="mt-5">
       <div className="flex gap-7">
@@ -30,7 +33,12 @@ const UserProfile: React.FC<IProps> = ({ isOtherProfile }) => {
             ) : (
               <div className="flex gap-1 item text-[14px] rounded-xl bg-dark_3 px-[20px] py-[10px] hover:opacity-50 cursor-pointer">
                 <Image src={EditIcon} alt="icon" width={16} height={16} />{" "}
-                <p className="leading-[30px]">Edit profile</p>
+                <p
+                  className="leading-[30px]"
+                  onClick={() => router.push(ROUTER_WEB.EDIT_PROFILE)}
+                >
+                  Edit profile
+                </p>
               </div>
             )}
           </div>
