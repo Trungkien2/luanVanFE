@@ -26,6 +26,20 @@ const config: Config = {
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  plugins: [require("daisyui")],
+  plugins: [
+    require("daisyui"),
+    function ({ addUtilities }: any) {
+      addUtilities({
+        ".scrollbar-none": {
+          /* Ẩn thanh cuộn */
+          "-ms-overflow-style": "none" /* IE and Edge */,
+          "scrollbar-width": "none" /* Firefox */,
+          "&::-webkit-scrollbar": {
+            display: "none" /* Chrome, Safari, and Opera */,
+          },
+        },
+      });
+    },
+  ],
 };
 export default config;

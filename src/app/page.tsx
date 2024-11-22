@@ -33,21 +33,22 @@ export default function Home({ searchParams }: { searchParams: SearchParams }) {
   const accessToken: string | null = searchParams.user
     ? JSON.parse(decodeURIComponent(searchParams.user))?.access_token
     : null;
+    console.log("🚀 ~ file: page.tsx ~ line 34 ~ Home ~ accessToken", accessToken)
 
   // Nếu có access_token, lưu nó và sau đó xóa query params
   if (accessToken) {
     const saved = use(saveToken(accessToken as string));
     if (saved) {
       // Xóa query params bằng cách redirect về chính trang mà không có params
-      redirect('/');
+      redirect("/");
     }
   }
 
   return (
-  <div className="flex justify-between">
-    <Sidebar/>
-    <HomePage/>
-    <Topcreator/>
-  </div>
+    <div className="flex justify-between h-screen">
+      <Sidebar />
+      <HomePage />
+      <Topcreator />
+    </div>
   );
 }

@@ -15,12 +15,16 @@
     "@mui/material": "^6.1.4",
     "axios": "^1.7.7",
     "cookie": "^1.0.1",
+    "heroicon": "^0.0.2",
     "next": "14.2.12",
     "query-string": "^9.1.1",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
     "react-toastify": "^10.0.6",
+    "stories-slider": "^0.0.0",
+    "swiper": "^11.1.14",
+    "tailwind-merge": "^2.5.4",
     "zustand": "^5.0.0"
   },
   "devDependencies": {
