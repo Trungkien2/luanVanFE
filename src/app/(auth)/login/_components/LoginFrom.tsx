@@ -9,6 +9,7 @@ import { Bounce, toast } from "react-toastify";
 import authApi from "@/api/auth/auth.api";
 import { useRouter } from "next/navigation";
 import ToastProvider from "@/provider/ToastProvider";
+import useUserStore from "@/store/userStore";
 
 interface LoginFormData {
   name: string;
@@ -23,6 +24,7 @@ const LoginFrom: React.FC = () => {
     formState: { errors },
   } = useForm<LoginFormData>();
   const router = useRouter();
+  const setUser = useUserStore((state) => state.setUser);
   const onSubmit = async (data: LoginFormData) => {
     try {
       const res: any = await authApi.login(data);
@@ -35,7 +37,7 @@ const LoginFrom: React.FC = () => {
           body: JSON.stringify({ token: res?.access_token }),
         });
       }
-
+      setUser(res?.userInfo)
       toast.success(`${res?.message?.en}`, {
         position: "top-right",
         autoClose: 500,

@@ -1,6 +1,7 @@
 import { Ibase } from "./base.interface";
+import { IPost } from "./post.interface";
 
-export interface IPost extends Ibase {
+export interface IUser extends Ibase {
   name: string;
   email: string;
   password: string;
@@ -8,4 +9,5 @@ export interface IPost extends Ibase {
   account_type?: "IN_APP" | "GOOGLE";
   bio?: string;
   picture?: string;
+  posts?: IPost[];
 }
