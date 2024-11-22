@@ -15,9 +15,12 @@ import {
 import { Avatar } from "@mui/material";
 import Image from "next/image";
 import { ROUTER_WEB } from "@/util/route";
+import useUserStore from "@/store/userStore";
 
 export default function Sidebar() {
-  const router = useRouter()
+  const user = useUserStore((state) => state.user);
+  console.log("🚀 ~ Sidebar ~ user:", user);
+  const router = useRouter();
   const pathname = usePathname(); // Lấy pathname từ usePathname
   const handleLogout = async () => {
     await fetch("/api/logout", {
@@ -33,7 +36,12 @@ export default function Sidebar() {
     { name: "Saved", href: ROUTER_WEB.SAVED, icon: BookmarkIcon },
     { name: "Reels", href: ROUTER_WEB.REELS, icon: ArchiveIcon },
     { name: "Chats", href: ROUTER_WEB.CHATS, icon: ChatIcon },
-    { name: "Create post", href: ROUTER_WEB.CREATE_POST, icon: galleryAddIcon,customImg : true },
+    {
+      name: "Create post",
+      href: ROUTER_WEB.CREATE_POST,
+      icon: galleryAddIcon,
+      customImg: true,
+    },
   ];
 
   const navItems2 = [
@@ -52,8 +60,11 @@ export default function Sidebar() {
       <div className="mb-8">
         <Image src={LogoMain} alt="logo" />
       </div>
-      <div className="my-11 flex gap-3 cursor-pointer" onClick={()=> router.push(ROUTER_WEB.USER_PROFILE)}>
-        <Avatar>H</Avatar>
+      <div
+        className="my-11 flex gap-3 cursor-pointer"
+        onClick={() => router.push(ROUTER_WEB.USER_PROFILE)}
+      >
+        <Avatar src={user?.picture}>H</Avatar>
         <div>
           <p className="text-[18px] font-bold">Lewis Hamilton</p>
           <p className="text-[14px] text-light_3">@Lewishamilton</p>
@@ -76,7 +87,11 @@ export default function Sidebar() {
                     : "text-white hover:bg-gray-700"
                 } rounded-lg h-[56px] text-lg`}
               >
-               {item.customImg ? <Image src={item.icon} alt="icon" className="w-6 h-6 mr-2"/> :<Icon className="w-6 h-6 mr-2" /> } 
+                {item.customImg ? (
+                  <Image src={item.icon} alt="icon" className="w-6 h-6 mr-2" />
+                ) : (
+                  <Icon className="w-6 h-6 mr-2" />
+                )}
                 {item.name}
               </Link>
             );

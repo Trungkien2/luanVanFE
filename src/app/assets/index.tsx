@@ -5,12 +5,15 @@ import LogoMain from "./Logo_main.svg";
 import MainPost from "./image.png";
 import AddPosticon from "./icons/add-post.svg";
 import ExploreCardPost from "./page/explore/explore_card_post.png";
-import ImageDemoCreatePost from './page/create-post/image_1.png'
-import ImageDemo2CreatePost from './page/create-post/image_2.png'
-import galleryAddIcon from './icons/gallery-add.svg'
-import PeopleIcon from './icons/people.svg';
-import EditIcon from './icons/edit.svg';
-import StoryImage from './storyImage.png'
+import ImageDemoCreatePost from "./page/create-post/image_1.png";
+import ImageDemo2CreatePost from "./page/create-post/image_2.png";
+import galleryAddIcon from "./icons/gallery-add.svg";
+import PeopleIcon from "./icons/people.svg";
+import EditIcon from "./icons/edit.svg";
+import StoryImage from "./storyImage.png";
+import CallIcon from "./call.svg";
+import videoCallIcon from "./videocall.png";
+import sendIcon from "./sendMess.svg";
 export {
   Logo,
   Image1,
@@ -24,5 +27,8 @@ export {
   galleryAddIcon,
   PeopleIcon,
   EditIcon,
-  StoryImage
+  StoryImage,
+  CallIcon,
+  videoCallIcon,
+  sendIcon,
 };
