@@ -8,19 +8,29 @@ import ButtonGroupCustom from "./ButtonGroup";
 import CardPost from "../../explore/_components/CardPost";
 import { useRouter } from "next/navigation";
 import { ROUTER_WEB } from "@/util/route";
+import useUserStore from "@/store/userStore";
 interface IProps {
   isOtherProfile?: boolean;
 }
 
-const UserProfile: React.FC<IProps> = ({ isOtherProfile }) => {
+const UserProfile: React.FC<IProps> = ({ isOtherProfile = false }) => {
+  const user = useUserStore((state) => state.user);
+
   const router = useRouter();
   return (
     <div className="mt-5">
       <div className="flex gap-7">
-        <Avatar className="w-[150px] h-[150px]">K</Avatar>
+        <Avatar
+          className="w-[150px] h-[150px]"
+          src={user?.picture}
+        >
+          K
+        </Avatar>
         <div>
           <div className="flex gap-8">
-            <h1 className="text-[36px] font-semibold">Lewis Hamilton</h1>
+            <h1 className="text-[36px] font-semibold">
+              {isOtherProfile ? "Lewis Hamilton" : user?.name}
+            </h1>
             {isOtherProfile ? (
               <div className="flex gap-3">
                 <div className="px-[20px] py-[10px] bg-primary text-white rounded-lg flex justify-center items-center cursor-pointer">
@@ -35,14 +45,14 @@ const UserProfile: React.FC<IProps> = ({ isOtherProfile }) => {
                 <Image src={EditIcon} alt="icon" width={16} height={16} />{" "}
                 <p
                   className="leading-[30px]"
-                  onClick={() => router.push(ROUTER_WEB.EDIT_PROFILE)}
+                  onClick={() => router.push(`${ROUTER_WEB.EDIT_PROFILE}/${user?.id}`)}
                 >
                   Edit profile
                 </p>
               </div>
             )}
           </div>
-          <p className="text-[18px] text-light_3">@Lewishamilton</p>
+          <p className="text-[18px] text-light_3">{user?.user_name}</p>
           <div className="flex items-center gap-10 mt-3 mb-3">
             <div className="text-[18px] ">
               <p className="text-primary">273</p>
@@ -57,11 +67,9 @@ const UserProfile: React.FC<IProps> = ({ isOtherProfile }) => {
           </div>
 
           <p className="text-[18px]">
-            🌿 Capturing the essence of nature through my lens <br />✨ "In
-            every walk with nature, one receives far more than he seeks." - John
-            Muir
+           {user?.bio}
           </p>
-          <StoryList />
+          {/* <StoryList /> */}
         </div>
       </div>
       <div className="mt-[68px]">

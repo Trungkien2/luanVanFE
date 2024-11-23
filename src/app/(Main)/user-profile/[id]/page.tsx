@@ -1,7 +1,7 @@
 import UserProfile from "../_components/UserProfile"
 
 
-const page = () => {
+const page = ({ params }: { params: { id: string } }) => {
   return (
     <div><UserProfile isOtherProfile={true}/></div>
   )

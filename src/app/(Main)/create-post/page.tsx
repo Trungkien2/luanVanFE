@@ -1,7 +1,7 @@
 import { AddPosticon } from "@/app/assets";
 import Image from "next/image";
 import FormCreate from "./_components/FormCreate";
-import TopPost from "./_components/TopPost";
+import TopPost from "../edit-profile/_components/TopPost";
 const page = () => {
   return (
     <div>

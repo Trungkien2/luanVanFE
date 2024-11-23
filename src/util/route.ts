@@ -15,4 +15,6 @@ export const ROUTER_WEB = {
 
 export const ROUTER_API = {
   AUTH: "/auth",
+  USER: "/user",
+  UPLOAD: "/upload"
 };

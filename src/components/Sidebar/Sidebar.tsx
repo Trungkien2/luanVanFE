@@ -19,13 +19,14 @@ import useUserStore from "@/store/userStore";
 
 export default function Sidebar() {
   const user = useUserStore((state) => state.user);
-  console.log("🚀 ~ Sidebar ~ user:", user);
+  const clearUser = useUserStore((state) => state.clearUser);
   const router = useRouter();
   const pathname = usePathname(); // Lấy pathname từ usePathname
   const handleLogout = async () => {
     await fetch("/api/logout", {
       method: "POST",
     });
+    clearUser()
 
     window.location.href = "/login";
   };
@@ -66,8 +67,8 @@ export default function Sidebar() {
       >
         <Avatar src={user?.picture}>H</Avatar>
         <div>
-          <p className="text-[18px] font-bold">Lewis Hamilton</p>
-          <p className="text-[14px] text-light_3">@Lewishamilton</p>
+          <p className="text-[18px] font-bold">{user?.name}</p>
+          <p className="text-[14px] text-light_3">{user?.user_name}</p>
         </div>
       </div>
       <div className="flex flex-col gap-12">

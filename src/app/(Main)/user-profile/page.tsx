@@ -1,9 +1,11 @@
-import UserProfile from "./_components/UserProfile"
+import UserProfile from "./_components/UserProfile";
 
 const page = () => {
   return (
-    <div><UserProfile/></div>
-  )
-}
+    <div>
+      <UserProfile />
+    </div>
+  );
+};
 
-export default page
+export default page;
