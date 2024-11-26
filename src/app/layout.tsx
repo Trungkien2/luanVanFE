@@ -1,4 +1,4 @@
-import ToastProvider from "@/provider/ToastProvider";
+import { SnackbarProvider } from "@/context/SnackbarContext";
 import type { Metadata } from "next";
 import { Inter } from 'next/font/google';
 import "./globals.css";
@@ -22,7 +22,10 @@ export default function RootLayout({
       <body
         className={inter.className}
       >
+        <SnackbarProvider>
         {children}
+
+        </SnackbarProvider>
       </body>
     </html>
   );

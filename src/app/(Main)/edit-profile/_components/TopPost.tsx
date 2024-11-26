@@ -9,7 +9,7 @@ import React from 'react'
 interface Iprops {
   user?:IUser
 }
-const TopPost:React.FC<Iprops> = ({user}) => {
+const TopPost:React.FC<Iprops> = ({}) => {
   const userStore = useUserStore((state) => state.user);
 
   return (

@@ -2,11 +2,9 @@
 import CardPost from "./CardPost/CardPost";
 
 import { MainPost } from "@/app/assets";
-import { useRouter } from "next/navigation";
 
 
 const HomePage = () => {
-  const router = useRouter();
   const fakePost = {
     userAvatar: "/path/to/avatar.jpg", // đường dẫn ảnh avatar
     userName: "Lewis Hamilton",
