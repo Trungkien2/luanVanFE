@@ -1,9 +1,6 @@
-
 import axios, { AxiosInstance } from 'axios';
-
 import queryString from 'query-string';
-
-
+import { getCookie } from 'cookies-next';
 
 const axiosClient: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -25,29 +22,19 @@ const axiosClient: AxiosInstance = axios.create({
   },
 });
 
-
-
-// Request interceptor to attach token from the server-side
+// Request interceptor to attach token from cookie
 axiosClient.interceptors.request.use((config) => {
-  // Attach token from cookie if available
-  if (typeof window === 'undefined' && config.headers) {
-    // In a server-side environment
-    const cookies = require('cookie');
-    const cookieHeader = config.headers['cookie'];
+  // Lấy token từ cookie (client-side)
+  if (typeof window !== 'undefined') {
+    const token = getCookie('access_token');
 
-    if (cookieHeader) {
-      const parsedCookies = cookies.parse(cookieHeader);
-      const token = parsedCookies['access_token'];
-
-      if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;
-      }
+    if (token && config.headers) {
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
   }
 
   return config;
 });
-
 // Add a response interceptor
 axiosClient.interceptors.response.use(
   function (response: any) {
@@ -57,4 +44,5 @@ axiosClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
 export default axiosClient;

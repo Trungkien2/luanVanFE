@@ -1,9 +1,8 @@
 "use client"
-import React from 'react'
-import TopPost from './TopPost'
-import { AxiosResponse } from 'axios'
 import { IUser } from '@/interface/user.interface'
+import React from 'react'
 import FormCreate from './FormCreate'
+import TopPost from './TopPost'
 interface Iprops {
     user:IUser
   }

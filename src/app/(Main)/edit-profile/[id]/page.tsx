@@ -1,8 +1,6 @@
+import userApi from "@/api/user/user.api";
 import { AddPosticon } from "@/app/assets";
 import Image from "next/image";
-import userApi from "@/api/user/user.api";
-import { IUser } from "@/interface/user.interface";
-import { AxiosResponse } from "axios";
 import EditProfile from "../_components/EditProfile";
 const page = async ({ params }: { params: { id: string } }) => {
   const { id } = params;

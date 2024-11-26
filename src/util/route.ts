@@ -8,13 +8,14 @@ export const ROUTER_WEB = {
   CHATS: "/chats",
   SETTINGS: "/settings",
   CREATE_POST: "/create-post",
-  REELS : '/reels',
-  USER_PROFILE : '/user-profile',
-  EDIT_PROFILE : '/edit-profile'
+  REELS: "/reels",
+  USER_PROFILE: "/user-profile",
+  EDIT_PROFILE: "/edit-profile",
 };
 
 export const ROUTER_API = {
   AUTH: "/auth",
   USER: "/user",
-  UPLOAD: "/upload"
+  UPLOAD: "/upload",
+  FOLLOW: "/follow",
 };

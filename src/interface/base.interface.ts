@@ -5,3 +5,12 @@ export interface Ibase {
   deleted_at?: string;
   [key: string]: unknown;
 }
+
+export interface IPagination {
+  currentPage: number;
+  nextPage: number;
+  prevPage: number;
+  totalPages:  number;
+  limit: number;
+  totalCount: number;
+}
