@@ -1,5 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import postApi from "@/api/Post/post.api";
+import uploadApi from "@/api/upload/upload.api";
+import { useSnackbar } from "@/context/SnackbarContext";
+import useUserStore from "@/store/userStore";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface PostFormData {
@@ -14,27 +18,60 @@ const FormCreate: React.FC = () => {
     formState: { errors },
   } = useForm<PostFormData>();
   const [mediaPreviews, setMediaPreviews] = useState<string[]>([]); // Dùng mảng cho nhiều ảnh xem trước
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const { showSnackbar, SnackbarComponent } = useSnackbar();
+  const userStore = useUserStore((state) => state.user);
 
   const onSubmit = async (data: PostFormData) => {
+    const formData = new FormData();
+    selectedFiles.forEach((file) => {
+      formData.append("files", file);
+    });
     try {
-      console.log(data);
+      const response = await uploadApi.uploadImages(formData);
+      console.log("Upload thành công:", response);
+      showSnackbar("Create post successfully", "success");
+      await postApi.create({
+        title: "title",
+        body:data.body,
+        media: "string",
+        status: "POST",
+        user_id: userStore?.id,
+      });
       // Xử lý gửi dữ liệu ở đây
     } catch (error: any) {
       console.error(error);
+      showSnackbar("Error create post", "error");
     }
   };
 
   const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Giải phóng các URL cũ
+    mediaPreviews.forEach((url) => URL.revokeObjectURL(url));
+
+    // Lấy file mới từ input
     const files = Array.from(e.target.files || []);
-    setMediaPreviews(files.map((file) => URL.createObjectURL(file)));
+    setSelectedFiles(files); // Lưu file để sử dụng khi cần upload
+
+    // Tạo URL tạm thời
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setMediaPreviews(previews);
   };
 
+  // Cleanup các URL khi component unmount
+  useEffect(() => {
+    return () => {
+      mediaPreviews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [mediaPreviews]);
   return (
     <div className="mt-[50px] w-[70%] pr-5">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Caption */}
         <div>
-          <p className="block text-[18px] font-bold text-gray-300 mb-[12px]">Caption</p>
+          <p className="block text-[18px] font-bold text-gray-300 mb-[12px]">
+            Caption
+          </p>
           <textarea
             id="body"
             {...register("body", { required: "Caption is required" })}
@@ -67,11 +104,17 @@ const FormCreate: React.FC = () => {
               </div>
             ) : (
               <div className="flex flex-col items-center text-gray-400">
-                <svg className="h-12 w-12" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8.5 11a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm8.4 5H7.1c-.4 0-.7-.2-.9-.5a.7.7 0 01.2-.9l2.2-1.7 1.3 1.2c.3.3.8.3 1.1 0l4.3-4.4a.7.7 0 011 0l2.5 3.3a.7.7 0 01-.9 1H16.9c-.3.1-.7 0-.9-.3z"/>
+                <svg
+                  className="h-12 w-12"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 2a10 10 0 100 20 10 10 0 000-20zM8.5 11a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm8.4 5H7.1c-.4 0-.7-.2-.9-.5a.7.7 0 01.2-.9l2.2-1.7 1.3 1.2c.3.3.8.3 1.1 0l4.3-4.4a.7.7 0 011 0l2.5 3.3a.7.7 0 01-.9 1H16.9c-.3.1-.7 0-.9-.3z" />
                 </svg>
                 <p>Drag photos and videos here</p>
-                <p className="text-sm text-gray-500">SVG, PNG, JPG or GIF (max. 800×400px)</p>
+                <p className="text-sm text-gray-500">
+                  SVG, PNG, JPG or GIF (max. 800×400px)
+                </p>
                 <button
                   type="button"
                   className="mt-4 px-4 py-2 bg-dark_4 text-white rounded-lg"
@@ -91,6 +134,7 @@ const FormCreate: React.FC = () => {
           Share Post
         </button>
       </form>
+      <SnackbarComponent />
     </div>
   );
 };

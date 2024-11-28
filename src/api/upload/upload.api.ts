@@ -6,6 +6,9 @@ class UploadApi extends BaseAPI {
     async uploadImage(body: any) {
         return await axiosClient.post(this.getRouter() + "/image", body,{headers});
       }
+      async uploadImages(body: any) {
+        return await axiosClient.post(this.getRouter() + "/images", body,{headers});
+      }
 }
 
 export default new UploadApi(ROUTER_API.UPLOAD);
