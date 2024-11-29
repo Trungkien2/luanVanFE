@@ -14,6 +14,13 @@ import StoryImage from "./storyImage.png";
 import CallIcon from "./call.svg";
 import videoCallIcon from "./videocall.png";
 import sendIcon from "./sendMess.svg";
+import likePost from "./icons/like.svg"
+import likedPost from "./icons/liked.svg"
+import chatIcon from "./icons/chat.svg"
+import shareIcon from "./icons/share.svg";
+import savePostIcon from "./icons/save.svg"
+import savedPostIcon from "./icons/saved.svg"
+
 export {
   Logo,
   Image1,
@@ -31,4 +38,10 @@ export {
   CallIcon,
   videoCallIcon,
   sendIcon,
+  likePost,
+  likedPost,
+  chatIcon,
+  shareIcon,
+  savedPostIcon,
+  savePostIcon
 };

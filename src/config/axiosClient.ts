@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import queryString from 'query-string';
-import { getCookie } from 'cookies-next';
+import { getCookie,deleteCookie } from 'cookies-next';
 
 const axiosClient: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -35,6 +35,18 @@ axiosClient.interceptors.request.use((config) => {
 
   return config;
 });
+
+axiosClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
+      // Xử lý khi token hết hạn
+      deleteCookie("access_token"); // Xóa token 
+      window.location.href = "/login"; // Chuyển hướng về trang login
+    }
+    return Promise.reject(error);
+  }
+);
 // Add a response interceptor
 axiosClient.interceptors.response.use(
   function (response: any) {

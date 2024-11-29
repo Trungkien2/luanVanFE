@@ -5,6 +5,7 @@ import { useSnackbar } from "@/context/SnackbarContext";
 import useUserStore from "@/store/userStore";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { json } from "stream/consumers";
 
 interface PostFormData {
   body: string;
@@ -28,13 +29,13 @@ const FormCreate: React.FC = () => {
       formData.append("files", file);
     });
     try {
-      const response = await uploadApi.uploadImages(formData);
+      const response: any = await uploadApi.uploadImages(formData);
       console.log("Upload thành công:", response);
       showSnackbar("Create post successfully", "success");
       await postApi.create({
         title: "title",
-        body:data.body,
-        media: "string",
+        body: data.body,
+        media: JSON.stringify(response?.files?.map((item) => item?.imageUrl)),
         status: "POST",
         user_id: userStore?.id,
       });
