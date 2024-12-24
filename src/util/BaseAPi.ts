@@ -8,7 +8,7 @@ export default class BaseAPI {
   constructor(router: string) {
     this.router = router;
   }
-  public getList = async (params: APIGetParams) =>
+  public getList = async <T>(params: APIGetParams): Promise<T> =>
     await axiosClient.get(this.router, {
       params,
     });

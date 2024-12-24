@@ -9,7 +9,11 @@ export enum PostType {
 export interface IPost extends Ibase {
   user_id: string;
   body: string;
-  media: any[];
+  media: string;
   status: PostType;
   user: IUser;
+  like_count : number
+  comment_count:number
+  isLiked:0 | 1
+
 }

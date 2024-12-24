@@ -10,7 +10,7 @@ export default function MainLayout({
     <div className="flex justify-between h-screen">
       <Sidebar />
       <div className="pt-[48px] flex-1 px-[52px] overflow-y-auto scrollbar-none">
-      <Providers>{children}</Providers>
+      {children}
       </div>
     </div>
   );

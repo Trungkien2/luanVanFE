@@ -2,6 +2,7 @@ import { SnackbarProvider } from "@/context/SnackbarContext";
 import type { Metadata } from "next";
 import { Inter } from 'next/font/google';
 import "./globals.css";
+import Providers from "@/provider/QueryClientProvider";
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
@@ -23,7 +24,7 @@ export default function RootLayout({
         className={inter.className}
       >
         <SnackbarProvider>
-        {children}
+        <Providers>{children}</Providers>
 
         </SnackbarProvider>
       </body>

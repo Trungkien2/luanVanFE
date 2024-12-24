@@ -18,5 +18,6 @@ export const ROUTER_API = {
   USER: "/user",
   UPLOAD: "/upload",
   FOLLOW: "/follow",
-  POST : '/post'
+  POST : '/post',
+  FAVORITE: '/favorite'
 };

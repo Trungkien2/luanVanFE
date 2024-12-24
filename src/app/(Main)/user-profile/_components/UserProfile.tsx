@@ -9,13 +9,47 @@ import CardPost from "../../explore/_components/CardPost";
 import { useRouter } from "next/navigation";
 import { ROUTER_WEB } from "@/util/route";
 import useUserStore from "@/store/userStore";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { POST_BY_FOLLOW, POST_BY_SELF } from "@/util/queryKey";
+import { IRespone } from "@/interface/respone.interface";
+import { IPost } from "@/interface/post.interface";
+import postApi from "@/api/post/post.api";
+import InfiniteScroll from "react-infinite-scroll-component";
 interface IProps {
   isOtherProfile?: boolean;
 }
 
 const UserProfile: React.FC<IProps> = ({ isOtherProfile = false }) => {
   const user = useUserStore((state) => state.user);
+  const { data, fetchNextPage, hasNextPage, isLoading, isError,refetch } =
+    useInfiniteQuery<IRespone<IPost>>({
+      queryKey: [POST_BY_SELF],
+      queryFn: async ({ pageParam = 1 }) => {
+        console.log("Fetching page:", pageParam);
+        const response = await postApi.getList<IRespone<IPost>>({
+          fields: ["$all"],
+          limit: 10,
+          page: pageParam as number,
+          where :{
+            user_id : user?.id
+          }
+        });
+        console.log("API Response:", response);
+        return response;
+      },
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        console.log("Last page data:", lastPage);
+        if (!lastPage?.pagination) return undefined;
 
+        const { currentPage, totalPages } = lastPage.pagination;
+        console.log(`Current Page: ${currentPage}, Total Pages: ${totalPages}`);
+
+        return currentPage < totalPages ? currentPage + 1 : undefined;
+      },
+    });
+
+    const posts = data?.pages.flatMap((page) => page?.rows) || [];
   const router = useRouter();
   return (
     <div className="mt-5">
@@ -76,9 +110,29 @@ const UserProfile: React.FC<IProps> = ({ isOtherProfile = false }) => {
         <ButtonGroupCustom />
       </div>
       <div className="mt-3 flex gap-10 flex-wrap">
-        {Array.from({ length: 10 }, (_, index) => index + 1).map((item) => (
-          <CardPost />
-        ))}
+      {posts.map((post) => (
+           <CardPost image={JSON.parse(JSON.parse(post?.media))?.[0]} />
+          ))}
+      {/* {isLoading && <p>Loading post...</p>}
+      {isError && <p>Something went wrong! Please try again later.</p>}
+
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={fetchNextPage}
+        hasMore={!!hasNextPage}
+        scrollableTarget="scroll-container"
+        loader={<p>Loading more users...</p>}
+       
+        endMessage={
+          <p className="w-full text-center">All post have been loaded!</p>
+        }
+      >
+        {posts.map((post) => (
+           <CardPost image={JSON.parse(JSON.parse(post?.media))?.[0]} />
+          ))}
+         
+      </InfiniteScroll> */}
+       
       </div>
     </div>
   );

@@ -3,16 +3,17 @@ import userApi, { UserResponse } from "@/api/user/user.api";
 import { PeopleIcon } from "@/app/assets";
 import UserCard from "@/components/TopCreator/UserCard";
 import { IUser } from "@/interface/user.interface";
+import { USER_NOT_FOLLOW } from "@/util/queryKey";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from "react-infinite-scroll-component"; 
 
 const Page = () => {
   const LIMIT = 10;
 
   const { data, fetchNextPage, hasNextPage, isLoading, isError,refetch } =
     useInfiniteQuery<UserResponse>({
-      queryKey: ["notFollowedUsers"],
+      queryKey: [USER_NOT_FOLLOW],
       queryFn: async ({ pageParam = 1 }) => {
         console.log("Fetching page:", pageParam);
         const response = await userApi.getUserNotFollow({
@@ -23,6 +24,7 @@ const Page = () => {
         console.log("API Response:", response);
         return response;
       },
+      staleTime: 1000 * 60 * 5,
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
         console.log("Last page data:", lastPage);
@@ -50,7 +52,7 @@ const Page = () => {
       {isLoading && <p>Loading users...</p>}
       {isError && <p>Something went wrong! Please try again later.</p>}
 
-    <div className=" scroll-container h-[calc(100vh-400px)] overflow-y-auto" id="scroll-container">
+    <div className=" scroll-container h-[calc(100vh-200px)] overflow-y-auto" id="scroll-container">
     <InfiniteScroll
         dataLength={users.length}
         next={fetchNextPage}

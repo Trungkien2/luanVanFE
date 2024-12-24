@@ -1,7 +1,44 @@
+"use client";
 import { Input } from "@/components/Common/Input";
 import CardPost from "./_components/CardPost";
+import { ImageList, ImageListItem } from "@mui/material";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import InfiniteScroll from "react-infinite-scroll-component"; // Import thư viện
+import { PostFollowResponse } from "@/interface/respone.interface";
+import { POST_BY_EXPLORE } from "@/util/queryKey";
+import postApi from "@/api/post/post.api";
 
-const page = () => {
+function srcset(image: string, size: number, rows = 1, cols = 1) {
+  return {
+    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
+    srcSet: `${image}?w=${size * cols}&h=${
+      size * rows
+    }&fit=crop&auto=format&dpr=2 2x`,
+  };
+}
+
+const Page = () => {
+  const { data, fetchNextPage, hasNextPage, isLoading, isError, refetch } =
+    useInfiniteQuery<PostFollowResponse>({
+      queryKey: [POST_BY_EXPLORE],
+      queryFn: async ({ pageParam = 1 }) => {
+        const response = await postApi.getPostExolore({
+          fields: ["$all"],
+          limit: 10,
+          page: pageParam as number,
+        });
+        return response;
+      },
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        if (!lastPage?.pagination) return undefined;
+        const { currentPage, totalPages } = lastPage.pagination;
+        return currentPage < totalPages ? currentPage + 1 : undefined;
+      },
+    });
+
+  const posts = data?.pages.flatMap((page) => page?.rows) || [];
+
   return (
     <div>
       <div className="flex flex-col items-center gap-3">
@@ -11,13 +48,44 @@ const page = () => {
         </div>
       </div>
       <div className="mt-[40px]">
-        <h1 className="title">Popular Today</h1>
-        <div className="mt-3 flex gap-10 flex-wrap">
-          {Array.from({length :10},(_,index)=> index +1).map(item=><CardPost/>)}
-        </div>
+        <h1 className="title mb-6">Popular Today</h1>
+        <InfiniteScroll
+          dataLength={posts.length} // Số lượng phần tử hiện tại
+          next={fetchNextPage} // Hàm gọi API để lấy thêm dữ liệu
+          hasMore={!!hasNextPage} // Kiểm tra xem còn dữ liệu không
+          loader={<p className="text-center">Loading...</p>} // Hiển thị khi đang tải
+          endMessage={<p className="text-center mt-4">You have seen it all!</p>} // Hiển thị khi hết dữ liệu
+        >
+          <ImageList
+            variant="quilted"
+            cols={4}
+            rowHeight={121}
+            sx={{
+              width: "100%",
+            }}
+          >
+            {posts.map((item) => (
+              <ImageListItem key={item.id} cols={1} rows={1}>
+                <img
+                  {...srcset(
+                    JSON.parse(JSON.parse(item?.media as string)).length > 0
+                      ? JSON.parse(JSON.parse(item?.media as string))?.[0]
+                      : JSON.parse(JSON.parse(item?.media as string)) || "",
+                    121,
+                    1,
+                    1
+                  )}
+                  alt={item.body}
+                  loading="lazy"
+                  className="object-contain"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </InfiniteScroll>
       </div>
     </div>
   );
 };
 
-export default page;
+export default Page;
