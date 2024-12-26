@@ -1,5 +1,5 @@
 "use client";
-import postApi from "@/api/Post/post.api";
+import postApi from "@/api/post/post.api";
 import uploadApi from "@/api/upload/upload.api";
 import { useSnackbar } from "@/context/SnackbarContext";
 import useUserStore from "@/store/userStore";
@@ -10,6 +10,7 @@ import { json } from "stream/consumers";
 interface PostFormData {
   body: string;
   media: File[]; // Định nghĩa media là một mảng File
+  status: string; // Thêm trường postType
 }
 
 const FormCreate: React.FC = () => {
@@ -26,17 +27,18 @@ const FormCreate: React.FC = () => {
   const onSubmit = async (data: PostFormData) => {
     const formData = new FormData();
     selectedFiles.forEach((file) => {
-      formData.append("files", file);
+      formData.append(data.status === "POST" ?"files" : "file", file);
     });
     try {
-      const response: any = await uploadApi.uploadImages(formData);
-      console.log("Upload thành công:", response);
+      const response: any =data.status === "POST"? await uploadApi.uploadImages(formData) : await uploadApi.uploadVideo(formData) ;
+      console.log("🚀 ~ onSubmit ~ response:", response)
+   
       showSnackbar("Create post successfully", "success");
       await postApi.create({
         title: "title",
         body: data.body,
-        media: JSON.stringify(response?.files?.map((item) => item?.imageUrl)),
-        status: "POST",
+        media:data.status === "POST"? JSON.stringify(response?.files?.map((item:any) => item?.imageUrl)):JSON.stringify(response?.videoUrl),
+        status:data.status,
         user_id: userStore?.id,
       });
       // Xử lý gửi dữ liệu ở đây
@@ -66,7 +68,7 @@ const FormCreate: React.FC = () => {
     };
   }, [mediaPreviews]);
   return (
-    <div className="mt-[50px] w-[70%] pr-5">
+    <div className="mt-[50px] w-[70%] pr-5 bg-dark_1 text-white">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Caption */}
         <div>
@@ -78,6 +80,21 @@ const FormCreate: React.FC = () => {
             {...register("body", { required: "Caption is required" })}
             className="w-full px-4 py-2 mt-2 bg-dark_3 text-white border border-gray-600 rounded-lg focus:ring focus:ring-blue-500 h-[114px]"
           />
+        </div>
+
+        {/* Post Type */}
+        <div>
+          <p className="block text-[18px] font-bold text-gray-300 mb-[12px]">
+            Post Type
+          </p>
+          <select
+            id="postType"
+            {...register("status", { required: "Post type is required" })}
+            className="w-full px-4 py-2 mt-2 bg-dark_3 text-white border border-gray-600 rounded-lg focus:ring focus:ring-blue-500"
+          >
+            <option value="REEL">Reel</option>
+            <option value="POST">Post</option>
+          </select>
         </div>
 
         {/* Upload Media */}
@@ -94,14 +111,24 @@ const FormCreate: React.FC = () => {
             />
             {mediaPreviews.length > 0 ? (
               <div className="flex flex-wrap gap-4 mt-4">
-                {mediaPreviews.map((preview, index) => (
-                  <img
-                    key={index}
-                    src={preview}
-                    alt={`Media Preview ${index + 1}`}
-                    className="w-32 h-32 rounded-md object-cover"
-                  />
-                ))}
+                {mediaPreviews.map((preview, index) => {
+                  const file = selectedFiles[index];
+                  return file.type.startsWith("image/") ? (
+                    <img
+                      key={index}
+                      src={preview}
+                      alt={`Media Preview ${index + 1}`}
+                      className="w-32 h-32 rounded-md object-cover"
+                    />
+                  ) : (
+                    <video
+                      key={index}
+                      src={preview}
+                      controls
+                      className="w-32 h-32 rounded-md object-cover"
+                    />
+                  );
+                })}
               </div>
             ) : (
               <div className="flex flex-col items-center text-gray-400">

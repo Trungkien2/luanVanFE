@@ -17,6 +17,11 @@ class PostApi extends BaseAPI {
       axiosClient.get(this.getRouter() + "/explore", {
         params,
       });
+
+      public getPostReels = async (params: APIGetParams): Promise<PostFollowResponse> =>
+        axiosClient.get(this.getRouter() + "/reels", {
+          params,
+        });
 }
 
 export default new PostApi(ROUTER_API.POST);

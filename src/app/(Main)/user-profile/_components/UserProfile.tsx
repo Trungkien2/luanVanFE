@@ -3,7 +3,7 @@ import { EditIcon } from "@/app/assets";
 import StoryList from "@/components/StoryList/StoryList";
 import { Avatar } from "@mui/material";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import ButtonGroupCustom from "./ButtonGroup";
 import CardPost from "../../explore/_components/CardPost";
 import { useRouter } from "next/navigation";
@@ -15,51 +15,49 @@ import { IRespone } from "@/interface/respone.interface";
 import { IPost } from "@/interface/post.interface";
 import postApi from "@/api/post/post.api";
 import InfiniteScroll from "react-infinite-scroll-component";
+
 interface IProps {
   isOtherProfile?: boolean;
 }
 
 const UserProfile: React.FC<IProps> = ({ isOtherProfile = false }) => {
   const user = useUserStore((state) => state.user);
-  const { data, fetchNextPage, hasNextPage, isLoading, isError,refetch } =
+  const [selectedButton, setSelectedButton] = useState<string>("POST");
+
+  const { data, fetchNextPage, hasNextPage, isLoading, isError, refetch } =
     useInfiniteQuery<IRespone<IPost>>({
-      queryKey: [POST_BY_SELF],
+      queryKey: [POST_BY_SELF, selectedButton],
       queryFn: async ({ pageParam = 1 }) => {
-        console.log("Fetching page:", pageParam);
         const response = await postApi.getList<IRespone<IPost>>({
           fields: ["$all"],
           limit: 10,
           page: pageParam as number,
-          where :{
-            user_id : user?.id
-          }
+          where: {
+            user_id: user?.id,
+            status: selectedButton,
+           
+          },
         });
-        console.log("API Response:", response);
         return response;
       },
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
-        console.log("Last page data:", lastPage);
         if (!lastPage?.pagination) return undefined;
-
         const { currentPage, totalPages } = lastPage.pagination;
-        console.log(`Current Page: ${currentPage}, Total Pages: ${totalPages}`);
-
         return currentPage < totalPages ? currentPage + 1 : undefined;
       },
     });
 
-    const posts = data?.pages.flatMap((page) => page?.rows) || [];
+  const posts = data?.pages.flatMap((page) => page?.rows) || [];
   const router = useRouter();
+
   return (
     <div className="mt-5">
       <div className="flex gap-7">
-        <Avatar
-          className="w-[150px] h-[150px]"
-          src={user?.picture}
-        >
+        <Avatar className="w-[150px] h-[150px]" src={user?.picture}>
           K
         </Avatar>
+
         <div>
           <div className="flex gap-8">
             <h1 className="text-[36px] font-semibold">
@@ -79,7 +77,9 @@ const UserProfile: React.FC<IProps> = ({ isOtherProfile = false }) => {
                 <Image src={EditIcon} alt="icon" width={16} height={16} />{" "}
                 <p
                   className="leading-[30px]"
-                  onClick={() => router.push(`${ROUTER_WEB.EDIT_PROFILE}/${user?.id}`)}
+                  onClick={() =>
+                    router.push(`${ROUTER_WEB.EDIT_PROFILE}/${user?.id}`)
+                  }
                 >
                   Edit profile
                 </p>
@@ -100,39 +100,17 @@ const UserProfile: React.FC<IProps> = ({ isOtherProfile = false }) => {
             </div>
           </div>
 
-          <p className="text-[18px]">
-           {user?.bio}
-          </p>
+          <p className="text-[18px]">{user?.bio}</p>
           {/* <StoryList /> */}
         </div>
       </div>
       <div className="mt-[68px]">
-        <ButtonGroupCustom />
+        <ButtonGroupCustom onSelect={setSelectedButton} />
       </div>
       <div className="mt-3 flex gap-10 flex-wrap">
-      {posts.map((post) => (
-           <CardPost image={JSON.parse(JSON.parse(post?.media))?.[0]} />
-          ))}
-      {/* {isLoading && <p>Loading post...</p>}
-      {isError && <p>Something went wrong! Please try again later.</p>}
-
-      <InfiniteScroll
-        dataLength={posts.length}
-        next={fetchNextPage}
-        hasMore={!!hasNextPage}
-        scrollableTarget="scroll-container"
-        loader={<p>Loading more users...</p>}
-       
-        endMessage={
-          <p className="w-full text-center">All post have been loaded!</p>
-        }
-      >
         {posts.map((post) => (
-           <CardPost image={JSON.parse(JSON.parse(post?.media))?.[0]} />
-          ))}
-         
-      </InfiniteScroll> */}
-       
+          <CardPost image={JSON.parse(JSON.parse(post?.media))?.[0]} />
+        ))}
       </div>
     </div>
   );

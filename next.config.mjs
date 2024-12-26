@@ -1,7 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['localhost'], // Thêm hostname vào đây
+      remotePatterns: [
+        {
+          protocol: 'http',
+          hostname: 'localhost',
+          port: '5000',
+          pathname: '/src/asset/images/**',
+        },
+      ],
       },
 };
 

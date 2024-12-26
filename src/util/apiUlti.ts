@@ -17,6 +17,7 @@ export type FilterParams = {
     order?: any;
     limit?: number;
     page?: number;
+    [key: string]: any;
   };
   
   export interface IResponseList<T> {
