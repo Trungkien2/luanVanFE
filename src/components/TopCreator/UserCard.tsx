@@ -3,8 +3,10 @@ import followApi from "@/api/follow/follow.api";
 import { useSnackbar } from "@/context/SnackbarContext";
 import { IUser } from "@/interface/user.interface";
 import useUserStore from "@/store/userStore";
+import { ROUTER_WEB } from "@/util/route";
 import { Avatar, Button } from "@mui/material";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React  from "react";
 interface Iprops {
   width?: string;
   user?: IUser;
@@ -13,7 +15,7 @@ interface Iprops {
 const UserCard = ({ width, user, onFollowSuccess }: Iprops) => {
   const { showSnackbar, SnackbarComponent } = useSnackbar();
   const userStore = useUserStore((state) => state.user);
-
+  const router = useRouter();
   const handleFollow = async (followed_id: string | undefined) => {
     try {
       await followApi.create({
@@ -31,11 +33,12 @@ const UserCard = ({ width, user, onFollowSuccess }: Iprops) => {
   };
   return (
     <div
-      className="flex flex-col items-center gap-2 p-6  rounded-[20px] border-[#1F1F22] border-solid"
+      className="flex flex-col items-center gap-2 p-6  rounded-[20px] border-[#1F1F22] border-solid cursor-pointer"
       style={{
         border: "1px solid #1F1F22",
         width,
       }}
+      onClick={() => router.push(`${ROUTER_WEB.USER_PROFILE}/${user?.id}`)}
     >
       <Avatar src={user?.picture}>K</Avatar>
       <p className="text-[14px]">{user?.name}</p>
