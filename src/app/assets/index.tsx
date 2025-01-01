@@ -14,12 +14,14 @@ import StoryImage from "./storyImage.png";
 import CallIcon from "./call.svg";
 import videoCallIcon from "./videocall.png";
 import sendIcon from "./sendMess.svg";
-import likePost from "./icons/like.svg"
-import likedPost from "./icons/liked.svg"
-import chatIcon from "./icons/chat.svg"
+import likePost from "./icons/like.svg";
+import likedPost from "./icons/liked.svg";
+import chatIcon from "./icons/chat.svg";
 import shareIcon from "./icons/share.svg";
-import savePostIcon from "./icons/save.svg"
-import savedPostIcon from "./icons/saved.svg"
+import savePostIcon from "./icons/save.svg";
+import savedPostIcon from "./icons/saved.svg";
+import TrashBin2 from "./TrashBin2.svg";
+import ArrowIcon from "./Vector.png";
 
 export {
   Logo,
@@ -43,5 +45,7 @@ export {
   chatIcon,
   shareIcon,
   savedPostIcon,
-  savePostIcon
+  savePostIcon,
+  TrashBin2,
+  ArrowIcon
 };

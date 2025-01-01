@@ -11,5 +11,8 @@ export interface IUser extends Ibase {
   bio?: string;
   picture?: string;
   posts?: IPost[];
-
+  isfollow :number
+  isRequestSent:number
+  isRequestReceived :number
+  
 }

@@ -7,19 +7,36 @@ import { USER_NOT_FOLLOW } from "@/util/queryKey";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import InfiniteScroll from "react-infinite-scroll-component"; 
+import { useState, useEffect } from "react";
+import { debounce } from "lodash";
 
 const Page = () => {
   const LIMIT = 10;
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
-  const { data, fetchNextPage, hasNextPage, isLoading, isError,refetch } =
+  useEffect(() => {
+    const handler = debounce(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    handler();
+
+    return () => {
+      handler.cancel();
+    };
+  }, [searchTerm]);
+
+  const { data, fetchNextPage, hasNextPage, isLoading, isError, refetch } =
     useInfiniteQuery<UserResponse>({
-      queryKey: [USER_NOT_FOLLOW],
+      queryKey: [USER_NOT_FOLLOW, debouncedSearchTerm],
       queryFn: async ({ pageParam = 1 }) => {
         console.log("Fetching page:", pageParam);
         const response = await userApi.getUserNotFollow({
           fields: ["$all"],
           limit: LIMIT,
           page: pageParam as number,
+          ...(debouncedSearchTerm ? {where :{ name: debouncedSearchTerm} } : {}),
         });
         console.log("API Response:", response);
         return response;
@@ -42,12 +59,27 @@ const Page = () => {
   const handleRefetchUsers = () => {
     refetch(); 
   };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <div className="pt-[48px] flex-1 px-[52px] overflow-y-auto scrollbar-none">
       <h1 className="text-[24px] font-bold flex gap-2">
         <Image src={PeopleIcon} alt="icon" />
         All Users
       </h1>
+
+      {/* <div className="mt-4">
+        <input
+          type="text"
+          placeholder="Search users..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="w-full px-4 py-2 bg-dark_3 text-white border border-gray-600 rounded-lg focus:ring focus:ring-blue-500"
+        />
+      </div> */}
 
       {isLoading && <p>Loading users...</p>}
       {isError && <p>Something went wrong! Please try again later.</p>}

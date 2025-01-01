@@ -24,6 +24,7 @@ const HomePage = () => {
         console.log("API Response:", response);
         return response;
       },
+      
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
         console.log("Last page data:", lastPage);

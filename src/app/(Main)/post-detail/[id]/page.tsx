@@ -1,10 +1,11 @@
 import React from "react";
 import PostDetail from "./_components/PostDetail";
 
-const page = () => {
+
+const page = ({ params }: { params: { id: string } }) => {
   return (
     <div>
-      <PostDetail />
+      <PostDetail postId={params.id} />
     </div>
   );
 };

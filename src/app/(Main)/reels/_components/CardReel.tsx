@@ -21,15 +21,17 @@ const CardReel: React.FC<CardReelProps> = ({ reel }) => {
           poster={"https://via.placeholder.com/150"}
         />
       )}
-      <div className="p-4">
-        <div className="flex items-center mb-2">
-          <Avatar src={reel.user.picture} alt={reel.user.name} />
-          <Typography variant="subtitle1" className="ml-2 text-white">
-            {reel.user.name}
-          </Typography>
+      {reel.user && (
+        <div className="p-4">
+          <div className="flex items-center mb-2">
+            <Avatar src={reel.user.picture} alt={reel.user.name} />
+            <Typography variant="subtitle1" className="ml-2 text-white">
+              {reel.user.name}
+            </Typography>
+          </div>
+          <p className="text-gray-400">{reel?.body}</p>
         </div>
-        <p className="text-gray-400">{reel?.body}</p>
-      </div>
+      )}
     </div>
   );
 };

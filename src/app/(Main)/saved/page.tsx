@@ -11,9 +11,9 @@ const page = () => {
       <div className="mt-[40px]">
         <ButtonGroupCustom />
         <div className="mt-3 flex gap-10 flex-wrap">
-          {Array.from({ length: 10 }, (_, index) => index + 1).map((item) => (
+          {/* {Array.from({ length: 10 }, (_, index) => index + 1).map((item) => (
             <CardPost />
-          ))}
+          ))} */}
         </div>
       </div>
     </div>

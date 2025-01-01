@@ -22,10 +22,10 @@ const ButtonGroupCustom: React.FC<IProps> = ({ onSelect }) => {
         aria-label="Basic button group"
         className="mb-3 border-none"
       >
-        <Button className="custom-button" onClick={() => onSelect("POST")}>
+        <Button className="custom-button" onClick={() => onSelect("Posts")}>
           Posts
         </Button>
-        <Button className="custom-button" onClick={() => onSelect("REEL")}>
+        <Button className="custom-button" onClick={() => onSelect("Reels")}>
           Reels
         </Button>
         {/* <Button className="custom-button">Tagged</Button> */}

@@ -35,8 +35,8 @@ const Page = () => {
           fields: ["$all"],
           limit: 10,
           page: pageParam as number,
-          filterType: selectedButton,
-          name: debouncedSearchQuery,
+          filterType: selectedButton ? selectedButton : undefined,
+          name: debouncedSearchQuery ? debouncedSearchQuery : undefined,
         });
         return response;
       },

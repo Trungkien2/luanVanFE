@@ -7,6 +7,10 @@ import InfiniteScroll from "react-infinite-scroll-component"; // Import thÆ° viá
 import { PostFollowResponse } from "@/interface/respone.interface";
 import { POST_BY_EXPLORE } from "@/util/queryKey";
 import postApi from "@/api/post/post.api";
+import { useState } from "react";
+import Modal from "@mui/material/Modal";
+import { useRouter } from "next/navigation";
+import { ROUTER_WEB } from "@/util/route";
 
 function srcset(image: string, size: number, rows = 1, cols = 1) {
   return {
@@ -18,6 +22,7 @@ function srcset(image: string, size: number, rows = 1, cols = 1) {
 }
 
 const Page = () => {
+  const router = useRouter();
   const { data, fetchNextPage, hasNextPage, isLoading, isError, refetch } =
     useInfiniteQuery<PostFollowResponse>({
       queryKey: [POST_BY_EXPLORE],
@@ -38,6 +43,18 @@ const Page = () => {
     });
 
   const posts = data?.pages.flatMap((page) => page?.rows) || [];
+  const [open, setOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const handleOpen = (image: string) => {
+    setSelectedImage(image);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedImage(null);
+  };
 
   return (
     <div>
@@ -77,12 +94,26 @@ const Page = () => {
                   )}
                   alt={item.body}
                   loading="lazy"
-                  className="object-contain"
+                  className="object-contain cursor-pointer"
+                  onClick={()=> router.push(`${ROUTER_WEB.POST_DETAIL}/${item.id}`)}
                 />
               </ImageListItem>
             ))}
           </ImageList>
         </InfiniteScroll>
+        <Modal open={open} onClose={handleClose}>
+          <div className="flex justify-center items-center h-full">
+            {selectedImage && (
+              <img
+                src={selectedImage}
+                alt="Selected"
+                className="object-contain"
+                style={{ maxHeight: "90%", maxWidth: "90%" }}
+                onClick={handleClose}
+              />
+            )}
+          </div>
+        </Modal>
       </div>
     </div>
   );

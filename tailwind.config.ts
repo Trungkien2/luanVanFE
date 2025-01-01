@@ -22,6 +22,7 @@ const config: Config = {
         light_3: "var(--light-3)",
         light_4: "var(--light-4)",
         gradient: "var(--gradient)",
+      
       },
     },
   },

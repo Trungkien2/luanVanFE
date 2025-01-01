@@ -11,6 +11,8 @@ export const ROUTER_WEB = {
   REELS: "/reels",
   USER_PROFILE: "/user-profile",
   EDIT_PROFILE: "/edit-profile",
+  POST_DETAIL: "/post-detail",
+  EDIT_POST : "/edit-post"
 };
 
 export const ROUTER_API = {
@@ -19,5 +21,6 @@ export const ROUTER_API = {
   UPLOAD: "/upload",
   FOLLOW: "/follow",
   POST : '/post',
-  FAVORITE: '/favorite'
+  FAVORITE: '/favorite',
+  COMMENT: '/comment',
 };

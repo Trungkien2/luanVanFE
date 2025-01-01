@@ -34,7 +34,7 @@ export default function Sidebar() {
     { name: "Home", href: ROUTER_WEB.HOME_PAGE, icon: HomeIcon },
     { name: "Explore", href: ROUTER_WEB.EXPLORE, icon: ArchiveIcon },
     { name: "People", href: ROUTER_WEB.PEOPLE, icon: UserIcon },
-    { name: "Saved", href: ROUTER_WEB.SAVED, icon: BookmarkIcon },
+    // { name: "Saved", href: ROUTER_WEB.SAVED, icon: BookmarkIcon },
     { name: "Reels", href: ROUTER_WEB.REELS, icon: ArchiveIcon },
     { name: "Chats", href: ROUTER_WEB.CHATS, icon: ChatIcon },
     {
@@ -46,7 +46,7 @@ export default function Sidebar() {
   ];
 
   const navItems2 = [
-    { name: "Settings", href: ROUTER_WEB.SETTINGS, icon: CogIcon },
+    // { name: "Settings", href: ROUTER_WEB.SETTINGS, icon: CogIcon },
     {
       name: "Logout",
       func: handleLogout,

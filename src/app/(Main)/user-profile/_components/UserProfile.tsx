@@ -12,8 +12,11 @@ import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import CardPost from "../../explore/_components/CardPost";
 import ButtonGroupCustom from "./ButtonGroup";
-import postApi from "@/api/Post/post.api";
 import UserApi, { IUserDetailRes } from "@/api/user/user.api";
+import postApi from "@/api/post/post.api";
+import { useSnackbar } from "@/context/SnackbarContext";
+import followApi from "@/api/follow/follow.api";
+import { set } from "lodash";
 
 interface IProps {
   isOtherProfile?: boolean;
@@ -23,19 +26,75 @@ interface IProps {
 const UserProfile: React.FC<IProps> = ({ isOtherProfile = false, userId }) => {
   const { user } = useUserStore();
   const [userData, setUserData] = useState<IUserDetailRes | null>(null);
-  console.log("🚀 ~ userData:", userData);
   const [selectedButton, setSelectedButton] = useState<string>("POST");
+  const [isFollow, setisFollow] = useState(false);
+  const [isRequestSent, setIsRequestSent] = useState(false);
+  const [isRequestReceived, setIsRequestReceived] = useState(false);
   const [totalPosts, setTotalPosts] = useState<number | null>(null);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const id = isOtherProfile && userId ? userId : user?.id;
-      if (id) {
-        const data = await UserApi.getUserDetail(id);
-        setUserData(data);
-        setTotalPosts(data.totalPosts);
+  const { showSnackbar, SnackbarComponent } = useSnackbar();
+  const fetchUserData = async () => {
+    const id = isOtherProfile && userId ? userId : user?.id;
+    if (id) {
+      const data = await UserApi.getUserDetail(id);
+      setUserData(data);
+      setTotalPosts(data.totalPosts);
+      setisFollow(!!data.user?.isFollow);
+      setIsRequestSent(!!data.user?.isRequestSent);
+      setIsRequestReceived(!!data.user?.isRequestReceived);
+    }
+  };
+  const handleFollow = async () => {
+    try {
+      if (isFollow) {
+        await followApi.unfollow(userData?.user?.id as string);
+        showSnackbar("Unfollow success", "success");
+      } else {
+        await followApi.create({
+          following_user_id: user?.id,
+          followed_user_id: userData?.user?.id,
+        });
+        showSnackbar("Follow success", "success");
       }
-    };
+      fetchUserData();
+    } catch (error: any) {
+      console.log("🚀 ~ handleFollow ~ error:", error);
+      showSnackbar("Follow/Unfollow error", "error");
+    }
+  };
+  const handleUnfollow = async (id: string) => {
+    try {
+      await followApi.unfollow(id);
+      showSnackbar("Unfollow success", "success");
+      fetchUserData();
+    } catch (error) {
+      console.log("🚀 ~ handleFollow ~ error:", error);
+      showSnackbar("Follow/Unfollow error", "error");
+    }
+  };
+  const handleAccept = async () => {
+    try {
+      await followApi.accept(userData?.user?.id as string);
+      showSnackbar("accept success", "success");
+      fetchUserData();
+    } catch (error) {
+      console.log("🚀 ~ handleFollow ~ error:", error);
+      showSnackbar("Follow/Unfollow error", "error");
+    }
+  };
+
+  const handleDeny = async () => {
+    try {
+      await followApi.deny(userData?.user?.id as string);
+      showSnackbar("deny success", "success");
+      fetchUserData();
+    } catch (error) {
+      console.log("🚀 ~ handleFollow ~ error:", error);
+      showSnackbar("Follow/Unfollow error", "error");
+    }
+  };
+
+  useEffect(() => {
     fetchUserData();
   }, [isOtherProfile, userId, user]);
 
@@ -69,6 +128,53 @@ const UserProfile: React.FC<IProps> = ({ isOtherProfile = false, userId }) => {
     return <div>Loading...</div>;
   }
 
+  const checkRendertButtonRequest = () => {
+    if (!isRequestSent && !isRequestReceived) {
+      return (
+        <>
+          <div
+            className="px-[20px] py-[10px] bg-primary text-white rounded-lg flex justify-center items-center cursor-pointer"
+            onClick={handleFollow}
+          >
+            {isFollow ? "UnFollow" : "Follow"}
+          </div>
+          {isFollow &&  <div className="px-[20px] py-[10px] bg-white text-black rounded-lg flex justify-center items-center cursor-pointer">
+            Message
+          </div>}
+         
+        </>
+      );
+    }
+    if (isRequestSent) {
+      return (
+        <div
+          className="px-[20px] py-[10px] bg-primary text-white rounded-lg flex justify-center items-center cursor-pointer"
+          onClick={() => handleUnfollow(userData?.user?.id as string)}
+        >
+          Request Sent
+        </div>
+      );
+    }
+    if (isRequestReceived) {
+      return (
+        <>
+          <div
+            className="px-[20px] py-[10px] bg-primary text-white rounded-lg flex justify-center items-center cursor-pointer"
+            onClick={handleAccept}
+          >
+            Request Accept
+          </div>
+          <div
+            className="px-[20px] py-[10px] bg-red-500 text-white rounded-lg flex justify-center items-center cursor-pointer"
+            onClick={() => handleDeny()}
+          >
+            Deny
+          </div>
+        </>
+      );
+    }
+  };
+
   return (
     <div className="mt-5">
       <div className="flex gap-7">
@@ -82,14 +188,7 @@ const UserProfile: React.FC<IProps> = ({ isOtherProfile = false, userId }) => {
               {userData?.user?.name}
             </h1>
             {isOtherProfile ? (
-              <div className="flex gap-3">
-                <div className="px-[20px] py-[10px] bg-primary text-white rounded-lg flex justify-center items-center cursor-pointer">
-                  Follow
-                </div>
-                <div className="px-[20px] py-[10px] bg-white text-black rounded-lg flex justify-center items-center cursor-pointer">
-                  Message
-                </div>
-              </div>
+              <div className="flex gap-3">{checkRendertButtonRequest()}</div>
             ) : (
               <div className="flex gap-1 item text-[14px] rounded-xl bg-dark_3 px-[20px] py-[10px] hover:opacity-50 cursor-pointer">
                 <Image src={EditIcon} alt="icon" width={16} height={16} />{" "}
@@ -145,6 +244,7 @@ const UserProfile: React.FC<IProps> = ({ isOtherProfile = false, userId }) => {
           </div>
         )}
       </div>
+      <SnackbarComponent />
     </div>
   );
 };

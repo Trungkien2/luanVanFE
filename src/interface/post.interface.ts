@@ -14,6 +14,10 @@ export interface IPost extends Ibase {
   user: IUser;
   like_count : number
   comment_count:number
-  isLiked:0 | 1
+  isLiked:any
+  created_date_unix_timestamp : number
+  totalLikes:number
+  totalComments:number
+  
 
 }
